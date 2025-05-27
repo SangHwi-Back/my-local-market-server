@@ -23,15 +23,44 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a NestJS server for an E-Commerce application. It provides a RESTful API for managing products and uploading product images. The server uses PostgreSQL as the database and TypeORM for database operations.
+
+### Features
+
+- PostgreSQL database integration with TypeORM
+- Product management (CRUD operations)
+- Image upload functionality
+- Static file serving for uploaded images
+- CORS enabled for cross-origin requests
 
 ## Project setup
+
+1. Install dependencies:
 
 ```bash
 $ pnpm install
 ```
 
-## Compile and run the project
+2. Create a `.env` file in the root directory with the following content (or copy from `.env.example`):
+
+```
+# Database Configuration
+DB_TYPE=postgres
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=my_local_market_db
+DB_SYNCHRONIZE=true
+```
+
+3. Start the PostgreSQL database using Docker:
+
+```bash
+$ docker-compose up -d
+```
+
+4. Run the application:
 
 ```bash
 # development
@@ -42,6 +71,46 @@ $ pnpm run start:dev
 
 # production mode
 $ pnpm run start:prod
+```
+
+## API Endpoints
+
+### Products
+
+- `GET /products` - Get all products
+- `GET /products/:id` - Get a product by ID
+- `POST /products` - Create a new product
+- `PUT /products/:id` - Update a product
+- `DELETE /products/:id` - Delete a product
+
+### Images
+
+- `POST /images/upload/:productId` - Upload an image for a product
+- `GET /images/product/:productId` - Get all images for a product
+- `GET /images/:id` - Get an image by ID
+- `DELETE /images/:id` - Delete an image
+
+## Example Usage
+
+### Creating a product
+
+```bash
+curl -X POST http://localhost:3000/products \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Sample Product",
+    "description": "This is a sample product",
+    "price": 19.99,
+    "stock": 100
+  }'
+```
+
+### Uploading an image for a product
+
+```bash
+curl -X POST http://localhost:3000/images/upload/1 \
+  -H "Content-Type: multipart/form-data" \
+  -F "image=@/path/to/your/image.jpg"
 ```
 
 ## Run tests
